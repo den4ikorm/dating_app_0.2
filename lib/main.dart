@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'services/auth_service.dart';
-import 'screens/login_screen.dart';
+// Auth imports removed for demo bypass
 import 'screens/match_screen.dart';
 import 'screens/chats_screen.dart';
 import 'screens/profile_screen.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
   ));
-  final auth = AuthService();
-  await auth.init();
-  runApp(ChangeNotifierProvider.value(value: auth, child: const DatingApp()));
+  
+  // App initialization without AuthService provider
+  runApp(const DatingApp());
 }
 
 class DatingApp extends StatelessWidget {
   const DatingApp({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,9 +30,8 @@ class DatingApp extends StatelessWidget {
           primary: Color(0xFF7b2fff), secondary: Color(0xFF00c9ff),
         ),
       ),
-      home: Consumer<AuthService>(
-        builder: (_, auth, __) => auth.isLoggedIn ? const MainShell() : const LoginScreen(),
-      ),
+      // Forced bypass directly to MainShell
+      home: const MainShell(),
     );
   }
 }
@@ -46,7 +44,7 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _index = 0;
   static const _screens = [MatchScreen(), _QuickStub(), ChatsScreen(), ProfileScreen()];
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
